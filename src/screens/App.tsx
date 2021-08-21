@@ -1,4 +1,4 @@
-import './styles/App.modules.css';
+import './styles/screens/App.modules.css';
 
 function App() {
   return (
