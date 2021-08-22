@@ -13,6 +13,7 @@ const App = () => {
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [cursor, setCursor] = useState(0);
   const [lastActive, setLastActive] = useState(0);
+
   const downPress = useKeyNavigation("ArrowDown");
   const upPress = useKeyNavigation("ArrowUp");
 

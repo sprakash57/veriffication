@@ -16,41 +16,38 @@ type Props = {
 const Check = ({ item, active, updateChecks, index }: Props) => {
     const [option, setOption] = useState("");
     const [hover, setHover] = useState(false);
-    const leftPress = useKeyNavigation("1");
-    const rightPress = useKeyNavigation("2");
+    const pressYes = useKeyNavigation("1");
+    const pressNo = useKeyNavigation("2");
 
     useEffect(() => {
-        if (active && leftPress) {
+        if (active && pressYes) {
             setOption("yes");
             updateChecks(index, "yes");
         }
-    }, [leftPress, active, index]);
+    }, [pressYes, active, index]);
 
     useEffect(() => {
-        if (active && rightPress) {
+        if (active && pressNo) {
             setOption("no");
             updateChecks(index, "no");
         }
-    }, [rightPress, active, index]);
+    }, [pressNo, active, index]);
 
-    const handleOne = () => {
-        if (active) {
-            setOption("yes");
-            updateChecks(index, "yes");
-        }
+    const handleYes = () => {
+        setOption("yes");
+        updateChecks(index, "yes");
     };
 
-    const handleTwo = () => {
-        if (active) {
-            setOption("no");
-            updateChecks(index, "no");
-        }
+    const handleNo = () => {
+        setOption("no");
+        updateChecks(index, "no");
     };
 
     return (
         <article
             className={classnames(
-                styles.item, active && styles.active,
+                styles.item,
+                active && styles.active,
                 (item.isActionable || index === 0) && styles.item__noOpacity,
                 hover && styles.hover
             )}
@@ -59,7 +56,7 @@ const Check = ({ item, active, updateChecks, index }: Props) => {
         >
             <p className={styles.item__description}>{item.description}</p>
             <Button
-                onClick={handleOne}
+                onClick={handleYes}
                 disabled={!item.isActionable && index !== 0}
                 className={classnames(
                     styles.btn,
@@ -70,7 +67,7 @@ const Check = ({ item, active, updateChecks, index }: Props) => {
                 Yes
             </Button>
             <Button
-                onClick={handleTwo}
+                onClick={handleNo}
                 disabled={!item.isActionable && index !== 0}
                 className={classnames(
                     styles.btn,
