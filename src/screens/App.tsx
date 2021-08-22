@@ -65,7 +65,6 @@ const App = () => {
     setDisableSubmit(!(index === checks.length - 1 || option === "no"));
     setChecks(newChecks);
   }
-
   // Get the checklist at initial mount.
   useEffect(() => {
     fetchData();
