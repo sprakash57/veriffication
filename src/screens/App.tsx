@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Check from '../components/Check';
 import { CheckItem, fetchChecks } from '../helpers/api';
 import './styles/screens/App.modules.css';
 
@@ -19,16 +20,41 @@ const App = () => {
       setError("Hmm... Something is not right!! Try refreshing the page.");
     }
   }
+
+  const updateChecks = (index: number, option: string) => {
+    let newChecks: CheckItem[] = [];
+    if (option === "no") {
+      newChecks = checks.map((check, i) => {
+        if (i > index) return { ...check, isActionable: false };
+        return { ...check, isActionable: true };
+      });
+    } else {
+      newChecks = checks.map(check => {
+        if (checks[index + 1] && check === checks[index + 1]) {
+          return { ...check, isActionable: true }
+        }
+        return check;
+      });
+    }
+    setChecks(newChecks);
+  }
+
   // Get the checklist at initial mount.
   useEffect(() => {
     fetchData();
   }, []);
 
   return (
-    <div className="App">
-      Veriffication
-      {JSON.stringify(checks)}
-    </div>
+    <main>
+      {!!checks.length && checks.map((item, i) => (
+        <Check
+          key={item.id}
+          index={i}
+          item={item}
+          updateChecks={updateChecks}
+        />
+      ))}
+    </main>
   );
 }
 
