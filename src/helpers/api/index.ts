@@ -38,7 +38,7 @@ export function fetchChecks(): Promise<CheckItem[]> {
     );
 }
 
-export function submitCheckResults(results: Record<string, any>[]) {
+export function submitCheckResults(results: CheckItem[]): Promise<CheckItem[]> {
     return new Promise((resolve, reject) =>
         setTimeout(
             () =>

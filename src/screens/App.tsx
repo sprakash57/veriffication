@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import Button from '../components/Button';
-import Check from '../components/Check';
-import { CheckItem, fetchChecks } from '../helpers/api';
+import { Button, Check, Alert, Loader } from '../components';
+import { CheckItem, fetchChecks, submitCheckResults } from '../helpers/api';
 import { useKeyNavigation } from '../helpers/hooks';
 import styles from '../styles/screens/App.module.css';
 
 const App = () => {
   const [checks, setChecks] = useState<CheckItem[]>([]);
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState<{ body: string, action: string } | null>(null);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [cursor, setCursor] = useState(0);
   const [lastActive, setLastActive] = useState(0);
@@ -23,16 +21,28 @@ const App = () => {
       const checks = await fetchChecks();
       checks.sort((prev, next) => prev.priority - next.priority);
       setChecks(checks);
+      setAlert(null);
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      setError("Hmm... Something is not right!! Try refreshing the page.");
+      setAlert({ body: "Hmm... Something is not right!! Try refreshing the page.", action: "Reload" });
     }
   }
 
-  const showSuccess = () => {
-    setSuccess(true);
-    setError("");
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const hasSubmitted = await submitCheckResults(checks);
+      if (hasSubmitted?.length) {
+        setAlert({ body: "Great!! All checks are submitted.", action: "Next" });
+      } else {
+        setAlert({ body: "Sad!! No Checks are sent to server.", action: "Reload" })
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setAlert({ body: "Whoa!! Last submission failed. Try again.", action: "Retry" })
+    }
   }
 
   const updateChecks = (index: number, option: string) => {
@@ -60,7 +70,7 @@ const App = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  // Track the down navigation. So that it not should not go beyond last active check item
   useEffect(() => {
     if (checks.length && downPress && lastActive > 0) {
       setCursor((prevState) =>
@@ -75,26 +85,36 @@ const App = () => {
     }
   }, [upPress, checks]);
 
+  if (loading) return <Loader />
+
+  if (alert) {
+    return <Alert message={alert} clickCallback={fetchData} />
+  }
+
   return (
     <main className={styles.container}>
-      {!!checks.length && checks.map((item, i) => (
-        <Check
-          key={item.id}
-          index={i}
-          item={item}
-          active={i === cursor}
-          updateChecks={updateChecks}
-        />
-      ))}
-      <section className={styles.submit}>
-        <Button
-          disabled={disableSubmit}
-          className={styles.submit__btn}
-          onClick={showSuccess}
-        >
-          Submit
-        </Button>
-      </section>
+      {!!checks.length && (
+        <>
+          {checks.map((item, i) => (
+            <Check
+              key={item.id}
+              index={i}
+              item={item}
+              active={i === cursor}
+              updateChecks={updateChecks}
+            />
+          ))}
+          <section className={styles.submit}>
+            <Button
+              disabled={disableSubmit}
+              className={styles.submit__btn}
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </section>
+        </>
+      )}
     </main>
   );
 }
