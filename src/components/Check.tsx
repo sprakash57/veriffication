@@ -8,12 +8,12 @@ import Button from "./Button";
 
 type Props = {
     item: CheckItem;
-    active?: boolean;
+    active: boolean;
     updateChecks: (item: number, btnStatus: string) => void;
     index: number;
 }
 
-const Check = ({ item, active = false, updateChecks, index }: Props) => {
+const Check = ({ item, active, updateChecks, index }: Props) => {
     const [option, setOption] = useState("");
     const [hover, setHover] = useState(false);
     const leftPress = useKeyNavigation("1");
