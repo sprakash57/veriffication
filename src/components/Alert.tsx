@@ -3,7 +3,7 @@ import Button from './Button';
 
 type Props = {
     message: { body: string, action: string };
-    clickCallback: VoidFunction;
+    clickCallback?: VoidFunction;
 }
 
 const Alert = ({ message, clickCallback }: Props) => {
