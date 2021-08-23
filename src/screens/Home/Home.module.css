@@ -1,6 +1,5 @@
 .container {
-  width: 500px;
-  min-width: 460px;
+  width: 450px;
   margin: 2rem auto;
   height: 650px;
   overflow-y: auto;
@@ -20,4 +19,10 @@
 }
 .submit__btn:disabled {
     background: var(--selected-color);
+}
+@media screen and (max-width: 600px) {
+  .container {
+    max-width: 410px;
+    padding: 1rem;
+  }
 }

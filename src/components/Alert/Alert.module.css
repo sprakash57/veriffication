@@ -1,6 +1,5 @@
 .alert {
     width: 500px;
-    min-width: 460px;
     margin: 0 auto;
     height: 650px;
     display: flex;
@@ -21,3 +20,8 @@
     border: none;
     border-radius: 5px;
 }
+@media screen and (max-width: 600px) {
+    .alert {
+      max-width: 410px;
+    }
+  }
