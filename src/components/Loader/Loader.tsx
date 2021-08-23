@@ -1,5 +1,5 @@
-import { classnames } from '../helpers/utils';
-import styles from '../styles/components/Loader.module.css';
+import { classnames } from '../../helpers/utils';
+import styles from './Loader.module.css';
 
 type Props = {
     className?: string;

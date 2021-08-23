@@ -1,6 +1,6 @@
 import React from "react";
-import { classnames } from "../helpers/utils";
-import styles from '../styles/components/Button.module.css';
+import { classnames } from "../../helpers/utils";
+import styles from './Button.module.css';
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;

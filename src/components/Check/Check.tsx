@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { CheckItem } from "../helpers/api";
-import { useKeyNavigation } from "../helpers/hooks";
-import { classnames } from "../helpers/utils";
-import styles from '../styles/components/Check.module.css';
-import Button from "./Button";
+import { CheckItem } from "../../helpers/api";
+import { useKeyNavigation } from "../../helpers/hooks";
+import { classnames } from "../../helpers/utils";
+import Button from "../../components/Button";
+import styles from './Check.module.css';
 
 type Props = {
     item: CheckItem;

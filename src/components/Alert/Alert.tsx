@@ -1,5 +1,5 @@
-import styles from '../styles/components/Alert.module.css';
-import Button from './Button';
+import styles from './Alert.module.css';
+import Button from '../Button';
 
 type Props = {
     message: { body: string, action: string };

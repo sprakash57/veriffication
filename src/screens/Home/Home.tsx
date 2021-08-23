@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Button, Check, Alert, Loader } from '../components';
-import { CheckItem, fetchChecks, submitCheckResults } from '../helpers/api';
-import { useKeyNavigation } from '../helpers/hooks';
-import styles from '../styles/screens/App.module.css';
+import Alert from '../../components/Alert';
+import Button from '../../components/Button';
+import Check from '../../components/Check';
+import Loader from '../../components/Loader';
+import { CheckItem, fetchChecks, submitCheckResults } from '../../helpers/api';
+import { useKeyNavigation } from '../../helpers/hooks';
+import styles from './Home.module.css';
 
-const App = () => {
+const Home = () => {
   const [checks, setChecks] = useState<CheckItem[]>([]);
   const [alert, setAlert] = useState<{ body: string, action: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(true);
-  const [cursor, setCursor] = useState(0);
-  const [lastActive, setLastActive] = useState(0);
+  const [cursor, setCursor] = useState(0); // Current position of navigation
+  const [lastActive, setLastActive] = useState(0); // last active check item index in the list
   // Track up and down navigation
   const downPress = useKeyNavigation("ArrowDown");
   const upPress = useKeyNavigation("ArrowUp");
@@ -121,4 +124,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default Home;

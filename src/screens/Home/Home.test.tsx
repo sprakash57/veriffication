@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { unmountComponentAtNode } from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import App from '../../screens/App';
+import Home from './Home';
 
 describe("App", () => {
   let container: any = null;
@@ -19,7 +19,7 @@ describe("App", () => {
 
   it('should show loading indicator', () => {
     act(() => {
-      render(<App />, container);
+      render(<Home />, container);
     })
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });

@@ -6,7 +6,7 @@ export type CheckItem = {
     answer?: string;
 }
 
-export function fetchChecks(): Promise<CheckItem[]> {
+export const fetchChecks = (): Promise<CheckItem[]> => {
     return new Promise((resolve, reject) =>
         setTimeout(
             () =>
@@ -39,7 +39,7 @@ export function fetchChecks(): Promise<CheckItem[]> {
     );
 }
 
-export function submitCheckResults(results: CheckItem[]): Promise<CheckItem[]> {
+export const submitCheckResults = (results: CheckItem[]): Promise<CheckItem[]> => {
     return new Promise((resolve, reject) =>
         setTimeout(
             () =>

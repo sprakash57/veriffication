@@ -1,4 +1,4 @@
-import Alert from '../../components/Alert';
+import Alert from './Alert';
 import { render, screen } from '@testing-library/react';
 
 describe('Alert', () => {
