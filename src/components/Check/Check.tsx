@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CheckItem } from "../../helpers/api";
 import { useKeyNavigation } from "../../helpers/hooks";
 import { classnames } from "../../helpers/utils";
@@ -18,29 +18,29 @@ const Check = ({ item, active, updateChecks, index }: Props) => {
     const [hover, setHover] = useState(false);
     const pressYes = useKeyNavigation("1");
     const pressNo = useKeyNavigation("2");
+    const updateCheckList = useCallback((option: string) => {
+        setOption(option);
+        updateChecks(index, option);
+    }, [index, updateChecks])
 
     useEffect(() => {
         if (active && pressYes) {
-            setOption("yes");
-            updateChecks(index, "yes");
+            updateCheckList("yes");
         }
-    }, [pressYes, active, index]);
+    }, [pressYes, active]);
 
     useEffect(() => {
         if (active && pressNo) {
-            setOption("no");
-            updateChecks(index, "no");
+            updateCheckList("no");
         }
-    }, [pressNo, active, index]);
+    }, [pressNo, active]);
 
     const handleYes = () => {
-        setOption("yes");
-        updateChecks(index, "yes");
+        updateCheckList("yes");
     };
 
     const handleNo = () => {
-        setOption("no");
-        updateChecks(index, "no");
+        updateCheckList("no");
     };
 
     return (
@@ -48,7 +48,7 @@ const Check = ({ item, active, updateChecks, index }: Props) => {
             className={classnames(
                 styles.item,
                 active && styles.active,
-                (item.isActionable || index === 0) && styles.item__noOpacity,
+                (item.isActionable || index === 0) && styles.item__noOpacity, // First item will be active by default
                 hover && styles.hover
             )}
             onMouseEnter={() => item.isActionable && setHover(true)}
