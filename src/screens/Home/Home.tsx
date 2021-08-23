@@ -47,15 +47,15 @@ const Home = () => {
       setAlert({ body: "Whoa!! Last submission failed. Try again.", action: "Retry" })
     }
   }
-
+  // Triggers whenever there is an option selection
   const updateChecks = (index: number, option: string) => {
     setChecks((checks) => {
       let newChecks: CheckItem[] = [...checks];
       newChecks[index].answer = option;
       const firstNoIndex = newChecks.findIndex(check => check.answer === "no");
-      const hasNo = firstNoIndex !== -1;
+      const hasNoChecked = firstNoIndex !== -1;
       newChecks = newChecks.map((check, i) => {
-        if (i > firstNoIndex && hasNo) return { ...check, isActionable: false }
+        if (i > firstNoIndex && hasNoChecked) return { ...check, isActionable: false }
         if (i === index + 1) return { ...check, isActionable: true }
         if (i > index + 1) {
           if (check.answer) return { ...check, isActionable: true }
@@ -63,9 +63,9 @@ const Home = () => {
         }
         return { ...check, isActionable: true };
       });
-      if (hasNo) setLastActive(firstNoIndex);
+      if (hasNoChecked) setLastActive(firstNoIndex);
       else setLastActive(index + 1);
-      setDisableSubmit(!(newChecks.every(check => check.answer) || hasNo));
+      setDisableSubmit(!(newChecks.every(check => check.answer) || hasNoChecked));
       return newChecks;
     });
   }
