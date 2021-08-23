@@ -3,6 +3,7 @@ export type CheckItem = {
     priority: number;
     description: string;
     isActionable?: boolean;
+    answer?: string;
 }
 
 export function fetchChecks(): Promise<CheckItem[]> {

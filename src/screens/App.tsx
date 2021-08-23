@@ -11,7 +11,7 @@ const App = () => {
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [cursor, setCursor] = useState(0);
   const [lastActive, setLastActive] = useState(0);
-
+  // Track up and down navigation
   const downPress = useKeyNavigation("ArrowDown");
   const upPress = useKeyNavigation("ArrowUp");
 
@@ -46,24 +46,25 @@ const App = () => {
   }
 
   const updateChecks = (index: number, option: string) => {
-    let newChecks: CheckItem[] = [];
-    if (option === "no") {
-      setLastActive(index);
-      newChecks = checks.map((check, i) => {
-        if (i > index) return { ...check, isActionable: false };
+    setChecks((checks) => {
+      let newChecks: CheckItem[] = [...checks];
+      newChecks[index].answer = option;
+      const firstNoIndex = newChecks.findIndex(check => check.answer === "no");
+      const hasNo = firstNoIndex !== -1;
+      newChecks = newChecks.map((check, i) => {
+        if (i > firstNoIndex && hasNo) return { ...check, isActionable: false }
+        if (i === index + 1) return { ...check, isActionable: true }
+        if (i > index + 1) {
+          if (check.answer) return { ...check, isActionable: true }
+          return { ...check, isActionable: false }
+        }
         return { ...check, isActionable: true };
       });
-    } else {
-      setLastActive(index + 1);
-      newChecks = checks.map(check => {
-        if (checks[index + 1] && check === checks[index + 1]) {
-          return { ...check, isActionable: true }
-        }
-        return check;
-      });
-    }
-    setDisableSubmit(!(index === checks.length - 1 || option === "no"));
-    setChecks(newChecks);
+      if (hasNo) setLastActive(firstNoIndex);
+      else setLastActive(index + 1);
+      setDisableSubmit(!(newChecks.every(check => check.answer) || hasNo));
+      return newChecks;
+    });
   }
   // Get the checklist at initial mount.
   useEffect(() => {
@@ -72,9 +73,11 @@ const App = () => {
   // Track the down navigation. So that it not should not go beyond last active check item
   useEffect(() => {
     if (checks.length && downPress && lastActive > 0) {
-      setCursor((prevState) =>
-        (prevState < lastActive) ? prevState + 1 : prevState
-      );
+      setCursor((prevState) => {
+        let limitToNavigate = lastActive;
+        if (checks.every(check => check.isActionable)) limitToNavigate = checks.length - 1;
+        return (prevState < limitToNavigate) ? prevState + 1 : prevState;
+      });
     }
   }, [downPress, checks, lastActive]);
 
